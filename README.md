@@ -1,6 +1,6 @@
 # Restaurant List
 
-___
+
 # Features
 + User can see all restaurants and their smiple information on home page：
 restaurant's photo
@@ -16,11 +16,11 @@ description
 photo
 
 + User can find specific restaurant by searching restaurant's name
-___
+
 # Environment SetUp
 1. Node.js
 2. Express
-___
+
 # Installing
 1. git clone https://github.com/denise97220/Restaurant-List
 2. cd restaurantList
