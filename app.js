@@ -3,6 +3,8 @@
 const express = require("express")
 const app = express()
 
+// 載入 mongoose
+const mongoose = require("mongoose")
 
 // 載入 handlebars 及 JSON 檔案
 const exphbs = require("express-handlebars")
@@ -12,6 +14,18 @@ const restList = require("./restaurant.json")
 // 定義要使用的連接埠號 (port number) 
 const port = 3000
 
+// 設定連線到 mongoDB
+mongoose.connect("mongodb://localhost/rest-list", { useNewUrlParser: true, 
+useUnifiedTopology: true })
+
+// 設定 db
+const db = mongoose.connection
+db.on("error", () => {
+  console.log("mongodb error!")
+})
+db.once("open", () => {
+  console.log("mongodb connected!")
+})
 
 // 將 template engine 設定為 handlerbars
 // 第一個參數是樣板引擎的名稱，第二個參數是樣板引擎相關的設定
