@@ -11,10 +11,10 @@ db.on("error", () => {
     console.log("mongodb error!")
 })
 db.once("open", () => {
-    console.log(RestJSON.results)
+    console.log("mongodb connected!")
+
     for(let i = 0; i < RestJSON.results.length; i ++) {
         Rest.create({
-            id: RestJSON.results[i].id,
             name: RestJSON.results[i].name,
             name_en: RestJSON.results[i].name_en,
             category: RestJSON.results[i].category,
@@ -26,5 +26,5 @@ db.once("open", () => {
             description: RestJSON.results[i].description
         })
     }
-    console.log("mongodb connected!")
+    console.log("done!")
 })
