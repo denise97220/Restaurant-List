@@ -114,9 +114,11 @@ app.post("/restaurants/:id/edit", (req,res) => {
 
 // 設定 search 頁面路由
 app.get("/search", (req,res) => {
-    const keyword = req.query.keyword
-    const searchRest = restList.results.filter( rest => rest.name.toLowerCase().includes(keyword.toLowerCase()))   
-    res.render("index", { restaurants: searchRest, keyword: keyword })
+    const keyword = req.query.keyword.toLowerCase()
+    Rest.find({name: { $regex: `${keyword}`, $options: "i" }})
+        .lean()
+        .then(rests => res.render("index", { restaurants: rests }))
+        .catch(error => console.log(error))
 })
 
 
