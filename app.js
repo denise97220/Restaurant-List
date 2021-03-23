@@ -3,6 +3,9 @@
 const express = require("express")
 const app = express()
 
+// 載入 method override
+const methodOverride = require("method-override")
+
 // 載入 Rest model
 const Rest = require("./models/rest")
 
@@ -10,6 +13,9 @@ const Rest = require("./models/rest")
 const mongoose = require("mongoose")
 mongoose.connect("mongodb://localhost/rest-list", { useNewUrlParser: true, 
 useUnifiedTopology: true })
+
+// 載入路由
+const routes = require("./routes")
 
 // 設定 db
 const db = mongoose.connection
@@ -45,81 +51,10 @@ app.set("view engine", "handlebars")
 // 告訴 Express：靜態檔案是放在名為 public 的資料夾中
 app.use(express.static("public"))
 
+// 將 request 導入路由器
+app.use(routes)
 
-// 設定 index 頁面路由
-app.get("/", (req,res) => {
-  Rest.find()
-      .lean()
-      .then(rests => res.render("index", { restaurants: rests }))
-      .catch(error => console.log(error))
-})
-
-
-// 設定 show 頁面路由
-app.get("/restaurants/:id", (req,res) => {
-  const id = req.params.id
-  Rest.findById(id)
-      .lean()
-      .then(rest => res.render("show", { rest } ))
-      .catch(error => console.log(error))
-})
-
-// 設定新增餐廳頁面路由
-app.get("/new", (req,res) => {
-  return res.render("new")
-})
-
-app.post("/restaurants", (req,res) => {
-  const newRest = req.body
-  Rest.create(newRest)
-      .then(() => res.redirect("/"))
-      .catch(error => console.log(error))
-})
-
-// 設定 delete 路由
-app.post("/restaurants/:id/delete", (req,res) => {
-  const id = req.params.id
-  Rest.findById(id)
-      .then(rest => rest.remove())
-      .then(() => res.redirect("/"))
-      .catch(error => console.log(error))
-})
-
-// 設定 edit 路由
-app.get("/restaurants/:id/edit", (req,res) => {
-  const id = req.params.id
-  Rest.findById(id)
-      .lean()
-      .then(rest => res.render("edit", { rest }))
-      .catch(error => console.log(error))
-})
-
-app.post("/restaurants/:id/edit", (req,res) => {
-  const id = req.params.id
-  const editedRest = req.body
-  Rest.findById(id)
-      .then(rest => {
-        rest.name = editedRest.name
-        rest.category = editedRest.category
-        rest.phone = editedRest.phone
-        rest.rating = editedRest.rating
-        rest.location = editedRest.location
-        rest.description = editedRest.description
-        rest.image = editedRest.image
-        return rest.save()
-      })
-      .then(() => res.redirect("/"))
-      .catch(error => console.log(error))
-})
-
-// 設定 search 頁面路由
-app.get("/search", (req,res) => {
-    const keyword = req.query.keyword.toLowerCase()
-    Rest.find({name: { $regex: `${keyword}`, $options: "i" }})
-        .lean()
-        .then(rests => res.render("index", { restaurants: rests }))
-        .catch(error => console.log(error))
-})
+app.use(methodOverride("_method"))
 
 
 // 監聽並啟動伺服器

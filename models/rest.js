@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 const restSchema = new Schema({
     name: {
     type: String,
-    required: true
     },
     name_en: {
         type: String,
@@ -14,7 +13,6 @@ const restSchema = new Schema({
     },
     image: {
         type: String,
-        required: true
     },
     location: {
         type: String,
@@ -27,7 +25,6 @@ const restSchema = new Schema({
     },
     rating: {
         type: String,
-        required: true
     },
     description: {
         type: String,
