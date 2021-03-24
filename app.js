@@ -9,22 +9,11 @@ const methodOverride = require("method-override")
 // 載入 Rest model
 const Rest = require("./models/rest")
 
-// 載入及設定 mongoose
-const mongoose = require("mongoose")
-mongoose.connect("mongodb://localhost/rest-list", { useNewUrlParser: true, 
-useUnifiedTopology: true })
+// 載入 mongoose
+require("./config/mongoose")
 
 // 載入路由
 const routes = require("./routes")
-
-// 設定 db
-const db = mongoose.connection
-db.on("error", () => {
-  console.log("mongodb error!")
-})
-db.once("open", () => {
-  console.log("mongodb connected!")
-})
 
 // 載入 handlebars 及 JSON 檔案
 const exphbs = require("express-handlebars")
